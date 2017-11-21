@@ -2,7 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/layout"
     tools:context="com.ddragons.benny.fragments.SearchBusinessFragment">
+
+
 
     <TextView
         android:id="@+id/editText"
@@ -47,5 +50,7 @@
         android:layout_alignTop="@+id/etSearch"
         android:layout_toEndOf="@+id/etSearch"
         android:text="SEARCH" />
+
+
 
 </RelativeLayout>

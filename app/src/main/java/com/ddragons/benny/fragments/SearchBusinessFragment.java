@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,7 @@ import android.widget.EditText;
 
 import com.ddragons.benny.R;
 
-public class SearchBusinessFragment extends Fragment implements View.OnClickListener{
+public class SearchBusinessFragment extends TabFragment implements View.OnClickListener{
 
     Button btnSearch;
     EditText etSearch;
@@ -21,6 +22,8 @@ public class SearchBusinessFragment extends Fragment implements View.OnClickList
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -28,8 +31,9 @@ public class SearchBusinessFragment extends Fragment implements View.OnClickList
     private OnFragmentInteractionListener mListener;
 
     public SearchBusinessFragment() {
-        // Required empty public constructor
+
     }
+    FragmentManager fragmentManager;
 
     /**
      * Use this factory method to create a new instance of
@@ -56,13 +60,20 @@ public class SearchBusinessFragment extends Fragment implements View.OnClickList
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        //init();
+        fragmentManager=getChildFragmentManager();
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search_business, container, false);
+        View view=inflater.inflate(R.layout.fragment_search_business, container, false);
+        btnSearch=(Button) view.findViewById(R.id.btnSearch);
+        btnSearch.setOnClickListener(this);
+        etSearch=(EditText) view.findViewById(R.id.etSearch);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -105,16 +116,31 @@ public class SearchBusinessFragment extends Fragment implements View.OnClickList
     }
 
     private void init(){
-        btnSearch=(Button) getView().findViewById(R.id.btnSearch);
-        btnSearch.setOnClickListener(this);
-        etSearch=(EditText) getView().findViewById(R.id.etSearch);
+
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSearch:
-
+                setFragment(new BlankFragment());
         }
     }
+
+    public Fragment getLastFragment(){
+        int index = fragmentManager.getBackStackEntryCount() - 1;
+        FragmentManager.BackStackEntry backEntry=fragmentManager.getBackStackEntryAt(index);
+        String tag = backEntry.getName();
+        Fragment fragment = fragmentManager.findFragmentByTag(tag);
+        return fragment;
+    }
+
+    public void setFragment(Fragment fragment){
+        fragmentManager.beginTransaction().replace(R.id.layout, fragment).addToBackStack(null).commit();
+    }
+
+    public boolean hasChildFragments(){
+        return fragmentManager.getBackStackEntryCount()!=0;
+    }
+
 }
